@@ -86,10 +86,23 @@ def test_apicheck_reports_forever_flag(frames):
     assert any("isForever=" in line for line in frames.eval('MockLog.chat').values())
 
 
+def test_retail_midnight_is_retail_and_probes(frames):
+    frames.execute('C_UnitAuras = { AddPrivateAuraAnchor = function() end }; UnitGetIncomingHeals = nil')
+    frames.execute('GetBuildInfo = function() return "12.1.5", "70391", "", 120105 end; WOW_PROJECT_ID = 1; HogHealsFrames.Compat.Init()')
+    c = frames.eval('HogHealsFrames.Compat')
+    assert c["isRetail"] is True and c["isForever"] is False and c["isEra"] is False and c["isTBC"] is False
+    assert c["auraFilterAllowed"] is False and c["hasNativeIncoming"] is False
+
+
+def test_classic_clients_are_not_retail(frames):
+    assert flags(frames, "WOW_PROJECT_CLASSIC")["isRetail"] is False
+    assert forever(frames)["isRetail"] is False
+
+
 def test_every_toc_lists_every_installed_client():
     import pathlib, re
     root = pathlib.Path(__file__).resolve().parent.parent
-    want = {"11508", "11509", "20505", "20506", "16001"}
+    want = {"120105", "120107"}   # Retail live 12.1.5 + PTR 12.1.7 (warcraft.wiki.gg Public_client_builds, 2026-10-16)
     tocs = sorted(list(root.glob("HogHeals*/HogHeals*.toc")) + list(root.glob("HogTron*/HogTron*.toc")))
     assert len(tocs) == len([d for pat in ("HogHeals*", "HogTron*") for d in root.glob(pat) if d.is_dir()])   # one toc per addon folder, whatever the branch carries
     for toc in tocs:

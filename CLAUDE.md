@@ -2,6 +2,19 @@
 
 Read `docs/ARCHITECTURE.md` first: folders, core API, module pattern, tests. This file is the rules.
 
+## This is the Retail fork
+- This repo (`hogtron-ui-retail`) targets **WoW Retail (Midnight 12.x)**. It was forked with full history from
+  `hogtron-ui` (WoW: Forever) on 2026-10-16. Same folder names, same `HogTronUIDB`: the two clients never share an
+  AddOns folder, and identical names keep fixes cherry-pickable.
+- The Forever repo is the `forever` remote: `git remote add forever https://github.com/Hogtron-Solutions-Tech-Stack/hogtron-ui.git`.
+  Port a Forever fix with `git fetch forever && git cherry-pick -x <sha>` on a branch off `origin/main`.
+- Retail runs the same restricted API as Forever (secret values, no restricted snippets, no combat log, `C_DamageMeter`),
+  so the hard rules below apply unchanged. What differs is content: Retail dungeons/quests, talents, no spell ranks,
+  no five-second rule. `HogHealsFrames.Compat.isRetail` is the switch.
+- `## Interface:` lists Retail live + PTR. Confirm in game with `/dump select(4, GetBuildInfo())` after each patch.
+- No CurseForge project yet: the core `.toc` has no `X-Curse-Project-ID`, so a `v*` tag fails the release preflight
+  and uploads nothing. Create a NEW CurseForge project for Retail (never reuse Forever's 1744106).
+
 ## Before you change anything
 - `git status` first. Work on a branch off **current `main`** (`git fetch && git switch -c feat/<thing> origin/main`);
   a git worktree per branch is the usual setup. One concern per PR. Never push to `main` directly.

@@ -1,10 +1,12 @@
 # HogTron UI: how the code is set up
 
-A UI suite for **WoW: Forever** (and the Classic Era / TBC Anniversary clients): healer party/raid frames, unit frames,
+A UI suite for **WoW Retail (Midnight 12.x)**, forked from the WoW: Forever suite (`hogtron-ui`) on 2026-10-16: healer party/raid frames, unit frames,
 action bars, a cast/mana/XP HUD, nameplates, quest tracker and dialog, a dungeon guide and journal, a damage meter,
 chat, a skin for Blizzard's windows, end-of-run awards. Lua 5.1, no build step; tests run the real Lua in Python.
 
-Repo: `Hogtron-Solutions-Tech-Stack/hogtron-ui` (MIT). CurseForge project 1744106 ("HogTron UI").
+Repo: `Hogtron-Solutions-Tech-Stack/hogtron-ui-retail` (MIT). Upstream: `hogtron-ui` (the `forever` remote). No CurseForge project yet.
+Retail shares Forever's restricted client API, so section 4 applies as written; the Classic-content modules
+(Atlas, Journal, Training, HUD rank advisor / five-second rule, Quests data) still carry Classic data and are being ported.
 
 ## 1. The addon folders
 

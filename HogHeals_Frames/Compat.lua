@@ -23,6 +23,9 @@ function Compat.Init()
   Compat.isForever = (n >= FOREVER_MIN_TOC and n < 20000)
   Compat.isEra = (major == 1 and not Compat.isForever) or (major == 0 and id == WOW_PROJECT_CLASSIC)
   Compat.isTBC = (major == 2) or (major == 0 and id == WOW_PROJECT_BURNING_CRUSADE_CLASSIC)
+  -- Retail (Midnight 12.x, toc 12xxxx). Same restricted API as Forever, so it takes the probe branch below;
+  -- the flag is for the Retail-only content (dungeons, talents, no spell ranks) the modules switch on.
+  Compat.isRetail = (major >= 10) or (major == 0 and WOW_PROJECT_MAINLINE ~= nil and id == WOW_PROJECT_MAINLINE)
   local knownClassicLineage = Compat.isTBC or major == 3 or major == 4 or major == 5
     or id == WOW_PROJECT_WRATH_CLASSIC or id == WOW_PROJECT_CATACLYSM_CLASSIC or id == WOW_PROJECT_MISTS_CLASSIC
 
@@ -60,7 +63,7 @@ function Compat.Init()
 end
 
 function Compat.Describe()
-  local keys = { "build", "projectId", "isEra", "isTBC", "isForever", "hasNativeIncoming", "hasEarthShield", "auraFilterAllowed", "secretValues", "hasGamepad", "hasLibHealComm" }
+  local keys = { "build", "projectId", "isEra", "isTBC", "isForever", "isRetail", "hasNativeIncoming", "hasEarthShield", "auraFilterAllowed", "secretValues", "hasGamepad", "hasLibHealComm" }
   local out = {}
   for _, k in ipairs(keys) do out[#out + 1] = k .. "=" .. tostring(Compat[k]) end
   local ev = {}

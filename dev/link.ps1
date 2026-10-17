@@ -2,16 +2,15 @@
 .SYNOPSIS
   Link the HogTron UI addon folders into a WoW client's Interface\AddOns via directory junctions.
 .EXAMPLE
-  .\dev\link.ps1 -Client anniversary          # link into _anniversary_
-  .\dev\link.ps1 -Client all                  # anniversary + era
-  .\dev\link.ps1 -Client beta                 # WoW: Forever beta (_classic_beta_); not part of "all"
-  .\dev\link.ps1 -Client anniversary -Remove  # unlink
+  .\dev\link.ps1                              # link into _retail_ (default; "all" = retail too)
+  .\dev\link.ps1 -Client beta                 # WoW: Forever beta (_classic_beta_), for side-by-side checks
+  .\dev\link.ps1 -Remove                      # unlink from _retail_
 .NOTES
   Junctions need no admin, but writing under "Program Files (x86)" may prompt UAC once.
   Remove = delete two junctions; the repo is untouched.
 #>
 param(
-  [ValidateSet("anniversary", "era", "retail", "beta", "all")] [string] $Client = "anniversary",
+  [ValidateSet("anniversary", "era", "retail", "beta", "all")] [string] $Client = "retail",
   [switch] $Remove,
   [string] $WowRoot = "C:\Program Files (x86)\World of Warcraft"
 )
@@ -19,7 +18,7 @@ param(
 $repo = Split-Path -Parent $PSScriptRoot
 $addons = @("HogTronUI", "HogHeals", "HogHeals_Frames", "HogTron_Atlas", "HogTron_Bars", "HogTron_Chat", "HogTron_HUD", "HogTron_Meter", "HogTron_Plates", "HogTron_Quests", "HogTron_Skin", "HogTron_Training", "HogTron_Units", "HogTron_Awards", "HogTron_Journal")
 $map = @{ anniversary = "_anniversary_"; era = "_classic_era_"; retail = "_retail_"; beta = "_classic_beta_" }
-$targets = if ($Client -eq "all") { @("anniversary", "era") } else { @($Client) }
+$targets = if ($Client -eq "all") { @("retail") } else { @($Client) }
 
 foreach ($t in $targets) {
   $dir = Join-Path $WowRoot "$($map[$t])\Interface\AddOns"
